@@ -1,5 +1,6 @@
 import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
+import { builderDevTools } from "@builder.io/dev-tools/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 declare module "@remix-run/node" {
@@ -20,5 +21,7 @@ export default defineConfig({
       },
     }),
     tsconfigPaths(),
+    builderDevTools(),
   ],
+  ssr: { noExternal: ["@builder.io/react"] },
 });
