@@ -5,7 +5,7 @@ import {
   isPreviewing,
 } from "@builder.io/sdk-react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Link } from "@remix-run/react";
 import { fetch as webFetch } from "@remix-run/web-fetch";
 import { CUSTOM_COMPONENTS } from "../builder-registry";
 import Header from "~/components/Header/Header";
@@ -23,6 +23,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     fetch: webFetch,
   });
 
+
   if (!page && !isPreviewing(url.search)) {
     throw new Response("Page Not Found", {
       status: 404,
@@ -36,6 +37,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 // Define and render the page.
 export default function Page() {
   const { page, builderApiKey } = useLoaderData<typeof loader>();
+  const PrefetchLink = (props: any) => {
+    return <Link {...props} to={props.href || "/"} prefetch="intent" />;
+  };
   // Render the page content from Builder.io
   return (
     <>
@@ -45,6 +49,7 @@ export default function Page() {
         apiKey={builderApiKey}
         content={page}
         customComponents={CUSTOM_COMPONENTS}
+        linkComponent={PrefetchLink}
       />
       <Footer />
     </>
